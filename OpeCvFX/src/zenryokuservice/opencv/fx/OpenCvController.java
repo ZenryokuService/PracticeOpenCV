@@ -39,7 +39,7 @@ public class OpenCvController {
 	private boolean cameraActive = false;
 	// the id of the camera to be used
 	private static int cameraId = 0;
-	
+		
 	/**
 	 * ボタン押下時のアクション処理。
 	 * "@FXML"アノテーションでFXMLとの同期を取っている
@@ -50,13 +50,18 @@ public class OpenCvController {
 		// カメラがアクティブ状態の時は停止する
 		if (this.cameraActive) {
 			this.cameraActive = false;
+			System.out.println("Stop");
 			this.button.setText("Start Camera");
 			this.stopAcquisition();
 			// 処理終了
 			return;
+		} 
+		if (this.cameraActive == false && this.capture.isOpened() == false) {
+			this.cameraActive = true;
+			System.out.println("Active");
+			// カメラを起動する
+			this.capture.open(this.cameraId);
 		}
-		// カメラ
-		this.capture.open(this.cameraId);
 		// カメラが開いていない時
 		if (this.capture.isOpened() == false) {
 			// エラーログを出力して処理を終了する
@@ -101,9 +106,12 @@ public class OpenCvController {
 
 	private void stopAcquisition() {
 		if (this.timer != null && this.timer.isShutdown() == false) {
+			System.out.println("Timer Shutdown");
 			try {
 				this.timer.shutdown();
 				this.timer.awaitTermination(33, TimeUnit.MICROSECONDS);
+				// メモリ解放
+				System.gc();
 			} catch(Exception e) {
 				// log any exception
 				System.err.println("Exception in stopping the frame capture, trying to release the camera now... " + e);
@@ -111,6 +119,7 @@ public class OpenCvController {
 		}
 		// @FIXME-[カメラを解放するだけで良い？]
 		if (this.capture.isOpened()) {
+			System.out.println("Camera Close");
 			this.capture.release();
 		}
 	}
