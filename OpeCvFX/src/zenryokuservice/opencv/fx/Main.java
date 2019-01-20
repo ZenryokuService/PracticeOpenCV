@@ -3,7 +3,9 @@ package zenryokuservice.opencv.fx;
 import org.opencv.core.Core;
 
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.fxml.FXMLLoader;
@@ -43,6 +45,15 @@ public class Main extends Application {
 			primaryStage.setScene(scene);
 			// 表示処理
 			primaryStage.show();
+			/* **バグ、と言うか実装もれ？ */
+			// アプリケーションを閉じるときに適切な動作を設定する
+			OpenCvController ctl = new OpenCvController();
+			primaryStage.setOnCloseRequest((new EventHandler<WindowEvent>(){
+				@Override
+				public void handle(WindowEvent event) {
+					ctl.setClosed();
+				}
+			}));
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

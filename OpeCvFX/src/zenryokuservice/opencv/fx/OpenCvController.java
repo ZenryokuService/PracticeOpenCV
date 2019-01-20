@@ -5,12 +5,14 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.Executors;
 
 import org.opencv.core.Mat;
+import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.videoio.VideoCapture;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import zenryokuservice.opencv.fx.util.Utils;
@@ -30,6 +32,10 @@ public class OpenCvController {
 	/** FXML定義のImageViewer */
 	@FXML
 	private ImageView currentFrame;
+	@FXML
+	private CheckBox logoCheckBox;
+	@FXML
+	private ImageView histogram;
 	
 	/** ビデオキャプチャ */
 	private VideoCapture capture = new VideoCapture();
@@ -75,6 +81,7 @@ public class OpenCvController {
 			@Override
 			public void run() {
 				Mat frame = grabFrame();
+//				Mat frame = Imgcodecs.imread("/images/20141221-1-638.jpg");
 				Image imageToShow = Utils.mat2Image(frame);
 				updateImageView(currentFrame, imageToShow);
 			}
@@ -104,16 +111,20 @@ public class OpenCvController {
 		return frame;
 	}
 
+	/**
+	 * 
+	 */
 	private void stopAcquisition() {
 		if (this.timer != null && this.timer.isShutdown() == false) {
 			System.out.println("Timer Shutdown");
 			try {
-				this.timer.shutdown();
 				this.timer.awaitTermination(33, TimeUnit.MICROSECONDS);
+				this.timer.shutdown();
 				// メモリ解放
 				System.gc();
 			} catch(Exception e) {
 				// log any exception
+				e.printStackTrace();
 				System.err.println("Exception in stopping the frame capture, trying to release the camera now... " + e);
 			}
 		}
