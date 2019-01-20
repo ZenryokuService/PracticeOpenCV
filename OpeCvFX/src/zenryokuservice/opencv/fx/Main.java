@@ -45,7 +45,7 @@ public class Main extends Application {
 			primaryStage.setScene(scene);
 			// 表示処理
 			primaryStage.show();
-			/* **バグ、と言うか実装もれ？ */
+			/* **バグ、と言うか実装もれ？ ** */
 			// アプリケーションを閉じるときに適切な動作を設定する
 			OpenCvController ctl = new OpenCvController();
 			primaryStage.setOnCloseRequest((new EventHandler<WindowEvent>(){

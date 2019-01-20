@@ -112,7 +112,7 @@ public class OpenCvController {
 	}
 
 	/**
-	 * 
+	 * 画面を停止するときの前処理
 	 */
 	private void stopAcquisition() {
 		if (this.timer != null && this.timer.isShutdown() == false) {
