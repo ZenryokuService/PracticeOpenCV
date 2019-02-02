@@ -1,11 +1,15 @@
 package zenryokuservice.opencv.fx;
 	
+import java.util.HashMap;
+import java.util.Map;
+
 import org.opencv.core.Core;
 
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.fxml.FXMLLoader;
@@ -20,12 +24,41 @@ import javafx.fxml.FXMLLoader;
  * 2018/11/18
  */
 public class Main extends Application {
+	/** ビデオキャプチャ画面の名前 */
+	private static final String VIDEO_VIEW = "Video";
+	/** ヒストグラム画面 */
+	private static final String HISTGRAM_VIEW = "Histgram";
+
+	/** 画面切り替え用ParentMap */
+	private Map<String, Parent> parentMap;
 	/**
 	 * このアプリケーション(Mainメソッド)が起動する前に
 	 * 起動(OpenCVのロード)する
 	 */
 	static {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+	}
+
+	/**
+	 * このMainクラスを初期化する。
+	 * 1. parentMapの初期化
+	 * =>OpenCvTest.fxmlをロードした時の画面
+	 * =>HistgramTest.fxmlをロードした時の画面
+	 */
+	private void initMain() {
+		parentMap = new HashMap<String, Parent>();
+		// FXMLをロード
+		try {
+			BorderPane video = (BorderPane)FXMLLoader.load(getClass().getResource("OpenCvTest.fxml"));
+			parentMap.put(VIDEO_VIEW, video);
+//			BorderPane histgram = (BorderPane)FXMLLoader.load(getClass().getResource("HistgramTest.fxml"));
+//			parentMap.put(HISTGRAM_VIEW, histgram);
+		} catch (Exception e) {
+			e.printStackTrace();
+			// 例外発生時はアプリケーションをエラーコードを返却して強制終了
+			System.exit(-1);
+		}
+
 	}
 	/**
 	 * スーパクラスApplication)のstartメソッドを起動する<br/>
@@ -34,9 +67,11 @@ public class Main extends Application {
 	 */
 	@Override
 	public void start(Stage primaryStage) {
+		// Mainクラスを起動するための準備を行う
+		initMain();
 		try {
-			// FXMLをロード
-			BorderPane root = (BorderPane)FXMLLoader.load(getClass().getResource("OpenCvTest.fxml"));
+			// Parent(FXMLよりロードした画面)
+			Parent root = parentMap.get(VIDEO_VIEW);
 			// 表示領域を作成する
 			Scene scene = new Scene(root,400,400);
 			// JavaFX用のCSSを適用する
