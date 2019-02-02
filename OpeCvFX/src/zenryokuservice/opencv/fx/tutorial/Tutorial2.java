@@ -8,6 +8,8 @@
  */
 package zenryokuservice.opencv.fx.tutorial;
 
+import org.opencv.core.Core;
+
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
@@ -22,6 +24,14 @@ import javafx.stage.WindowEvent;
  * 2019/02/02
  */
 public class Tutorial2 extends Application {
+	/** ネイティブライブラリを読み込む */
+	static {
+		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+	}
+	/**
+	 * メインメソッド。
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		// 親クラス(Superクラス)のメソッド起動
 		launch();
@@ -32,7 +42,7 @@ public class Tutorial2 extends Application {
 	 */
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		FXMLLoader loader = FXMLLoader.load(getClass().getResource("View.xml"));
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("Video.fxml"));
 		BorderPane root = (BorderPane) loader.load();
 		Scene scene = new Scene(root, 800, 600);
 		scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
