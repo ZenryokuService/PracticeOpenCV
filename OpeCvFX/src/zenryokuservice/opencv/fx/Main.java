@@ -75,7 +75,7 @@ public class Main extends Application {
 			Parent root = parentMap.get(VIDEO_VIEW);
 			// 表示領域を作成する
 			Scene scene = new Scene(root,400,400);
-			// JavaFX用のCSSを適用する
+			// JavaFX用のCSSを適用する(
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			// Sceneをステージに設定する
 			primaryStage.setScene(scene);

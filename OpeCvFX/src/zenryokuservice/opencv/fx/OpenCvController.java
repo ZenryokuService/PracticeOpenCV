@@ -152,4 +152,8 @@ public class OpenCvController {
 		protected void setClosed() {
 			this.stopAcquisition();
 		}
+
+		private void loadLogo() {
+			
+		}
 }
