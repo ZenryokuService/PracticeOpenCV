@@ -1,5 +1,6 @@
 package zenryokuservice.opencv.fx;
 	
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -49,7 +50,7 @@ public class Main extends Application {
 		parentMap = new HashMap<String, Parent>();
 		// FXMLをロード
 		try {
-			BorderPane video = (BorderPane)FXMLLoader.load(getClass().getResource("OpenCvTest.fxml"));
+			BorderPane video = (BorderPane)FXMLLoader.load(ClassLoader.getSystemResource("OpenCVTest.fxml"));
 			parentMap.put(VIDEO_VIEW, video);
 //			BorderPane histgram = (BorderPane)FXMLLoader.load(getClass().getResource("HistgramTest.fxml"));
 //			parentMap.put(HISTGRAM_VIEW, histgram);
