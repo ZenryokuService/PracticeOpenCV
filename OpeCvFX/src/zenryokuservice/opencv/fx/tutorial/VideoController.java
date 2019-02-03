@@ -39,19 +39,19 @@ import zenryokuservice.opencv.fx.util.*;
  */
 public class VideoController
 {
-	/** FXML button -> fx:id="button" */
+	/** FXML カメラ開始ボタン -> fx:id="button" */
 	@FXML
 	private Button button;
-	/** FXML grayscale checkbox -> fx:id="grayscale" */
+	/** FXML グレースケールチェックボックス -> fx:id="grayscale" */
 	@FXML
 	private CheckBox grayscale;
-	/** FXML logo checkbox -> fx:id="logoCheckBox" */
+	/** FXML ロードチェックボックス -> fx:id="logoCheckBox" */
 	@FXML
 	private CheckBox logoCheckBox;
-	/** the FXML grayscale checkbox -> fx:id="histogram" */
+	/** FXML ヒストグラム -> fx:id="histogram" */
 	@FXML
 	private ImageView histogram;
-	/** the FXML area for showing the current frame -> fx:id="currentFrame" */
+	/** FXML 画像を表示するラベル -> fx:id="currentFrame" */
 	@FXML
 	private ImageView currentFrame;
 	
@@ -63,9 +63,11 @@ public class VideoController
 	private boolean cameraActive;
 	/** ロゴ */
 	private Mat logo;
-	
+
+	/** デバック用フラグ */
+	private boolean debug = true;
 	/**
-	 * Initialize method, automatically called by @{link FXMLLoader}
+	 * FXMLLoaderに自動的に呼ばれるらしい。
 	 */
 	public void initialize()
 	{
@@ -74,35 +76,33 @@ public class VideoController
 	}
 	
 	/**
-	 * The action triggered by pushing the button on the GUI
+	 * ボタン押下時の処理(イベント処理)
 	 */
 	@FXML
 	protected void startCamera()
 	{
-		// set a fixed width for the frame
+		// フレームサイズ指定
 		this.currentFrame.setFitWidth(600);
-		// preserve image ratio
+		// イメージのレイシオを設定する
 		this.currentFrame.setPreserveRatio(true);
 		
 		if (!this.cameraActive)
 		{
-			// start the video capture
+			// キャプチャ開始
 			this.capture.open(0);
 			
-			// is the video stream available?
+			// ビデオが起動しているか否か
 			if (this.capture.isOpened())
 			{
 				this.cameraActive = true;
 				
-				// grab a frame every 33 ms (30 frames/sec)
+				// フレームを33ミリ秒ごとに掴む (30 frames/sec)
 				Runnable frameGrabber = new Runnable() {
 					
 					@Override
 					public void run()
 					{
-						// effectively grab and process a single frame
 						Mat frame = grabFrame();
-						// convert and show the frame
 						Image imageToShow = Utils.mat2Image(frame);
 						updateImageView(currentFrame, imageToShow);
 					}
@@ -141,7 +141,7 @@ public class VideoController
 		if (logoCheckBox.isSelected())
 		{
 			// read the logo only when the checkbox has been selected
-			this.logo = Imgcodecs.imread("resources/Poli.png");
+			this.logo = Imgcodecs.imread("resources/images/Poli.png");
 		}
 	}
 	
@@ -168,6 +168,12 @@ public class VideoController
 					// add a logo...
 					if (logoCheckBox.isSelected() && this.logo != null)
 					{
+						if (debug) {
+							System.out.println("*** デバック ***");
+							System.out.println("frame: cols=" + frame.cols() + " rows=" + frame.rows());
+							System.out.println("logo: cols=" + logo.cols() + " rows=" + logo.rows());
+							debug = false;
+						}
 						Rect roi = new Rect(frame.cols() - logo.cols(), frame.rows() - logo.rows(), logo.cols(),
 								logo.rows());
 						Mat imageROI = frame.submat(roi);

@@ -6,7 +6,7 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.text.*?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="it.polito.teaching.cv.VideoController">
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="zenryokuservice.opencv.fx.tutorial.VideoController">
 	<center>
 	   <ImageView fx:id="currentFrame" />
    </center>
