@@ -14,6 +14,7 @@ import org.opencv.imgcodecs.Imgcodecs;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.SplitMenuButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
@@ -42,6 +43,10 @@ public class FourierController {
 	private Button antitransformButton;
 	@FXML
 	private Label messageLbl;
+	@FXML
+	private Button exeButton;
+	@FXML
+	private SplitMenuButton selectorBox;
 	
 	// the main stage
 	private Stage stage;
@@ -62,6 +67,8 @@ public class FourierController {
 		this.image = new Mat();
 		this.planes = new ArrayList<>();
 		this.complexImage = new Mat();
+		
+		
 	}
 	
 	/**
@@ -71,12 +78,13 @@ public class FourierController {
 	protected void loadImage()
 	{
 		// ラベルを初期化する
-		messageLbl.setText("");
+		if (messageLbl != null) messageLbl.setText("");
 		// show the open dialog window
 		File file = this.fileChooser.showOpenDialog(this.stage);
 		if (file != null)
 		{
-			boolean isPng = file.getName().toString().indexOf(".png") != -1;
+			boolean isPng = file.getName().toString().indexOf(".png") == -1;
+			System.out.println("isPng = " + isPng);
 			if (isPng) {
 				messageLbl.setText("PNGファイルではありません。");
 				return;
@@ -164,7 +172,14 @@ public class FourierController {
 		// disable the button for performing the antitransformation
 		this.antitransformButton.setDisable(true);
 	}
-	
+
+	/**
+	 * FXMLファイルにこのメソッドをonAction属性に指定している。
+	 */
+	@FXML
+	public void execute() {
+		System.out.println("Hello JavaFX");
+	}
 	/**
 	 * Optimize the image dimensions
 	 * 
