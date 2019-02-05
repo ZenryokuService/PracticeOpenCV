@@ -23,7 +23,7 @@ import javafx.stage.WindowEvent;
  * @author takunoji
  * 2019/02/02
  */
-public class Tutorial2 extends Application {
+public class Tutorial extends Application {
 	/** ネイティブライブラリを読み込む */
 	static {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);

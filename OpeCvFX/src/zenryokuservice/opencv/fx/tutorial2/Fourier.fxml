@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.*?>
+
+<BorderPane prefHeight="186.0" prefWidth="481.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="zenryokuservice.opencv.fx.tutorial2.FourierController">
+	<left>
+		<VBox alignment="CENTER">
+			<padding>
+				<Insets left="10" right="10" />
+			</padding>
+   <children>
+   			<ImageView fx:id="originalImage" />
+   </children>
+		</VBox>
+	</left>
+	<right>
+		<VBox alignment="CENTER" spacing="10">
+			<padding>
+				<Insets left="10" right="10" />
+			</padding>
+   <children>
+   			<ImageView fx:id="transformedImage" />
+   			<ImageView fx:id="antitransformedImage" />
+   </children>
+		</VBox>
+	</right>
+	<bottom>
+		<HBox alignment="CENTER" spacing="10">
+			<padding>
+				<Insets bottom="25" left="25" right="25" top="25" />
+			</padding>
+   <children>
+   			<Button alignment="center" onAction="#loadImage" text="Load Image" />
+   			<Button fx:id="transformButton" alignment="center" disable="true" onAction="#transformImage" text="Apply transformation" />
+   			<Button fx:id="antitransformButton" alignment="center" disable="true" onAction="#antitransformImage" text="Apply anti transformation" />
+   </children>
+		</HBox>
+	</bottom>
+   <top>
+      <Label id="messageLbl" BorderPane.alignment="CENTER" />
+   </top>
+</BorderPane>
