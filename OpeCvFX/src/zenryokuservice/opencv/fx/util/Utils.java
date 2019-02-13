@@ -31,7 +31,10 @@ public class Utils {
 		}
 		catch (Exception e)
 		{
-			System.err.println("Cannot convert the Mat obejct: " + e);
+			// show the exception details
+			System.err.println("Cannot convert the Mat object:");
+			e.printStackTrace();
+			
 			return null;
 		}
 	}

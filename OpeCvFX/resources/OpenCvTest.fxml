@@ -1,21 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.image.*?>
-<?import javafx.scene.control.*?>
 <?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.layout.BorderPane?>
-
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
 
 <BorderPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="zenryokuservice.opencv.fx.OpenCvController">
-   <center>
-      <BorderPane prefHeight="522.0" prefWidth="410.0" BorderPane.alignment="CENTER">
-         <bottom>
-            <Button fx:id="button" mnemonicParsing="false" onAction="#startCamera" text="StartCamera" BorderPane.alignment="CENTER" />
-         </bottom>
-         <center>
-            <ImageView fx:id="currentFrame" fitHeight="248.0" fitWidth="234.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER" />
-         </center>
-      </BorderPane>
+	<center>
+	   <ImageView fx:id="currentFrame" />
    </center>
+   <right>
+      <VBox alignment="CENTER_LEFT" spacing="10">
+         <padding>
+            <Insets left="10" right="20" />
+         </padding>
+         <children>
+            <ImageView fx:id="histogram" />
+            <Text text="Controls" />
+            <CheckBox fx:id="grayscale" text="Show in gray scale" />
+            <CheckBox fx:id="logoCheckBox" onAction="#loadLogo" text="Show logo" />
+         </children>
+      </VBox>
+   </right>
+   <bottom>
+      <HBox alignment="CENTER">
+         <padding>
+            <Insets bottom="25" left="25" right="25" top="25" />
+         </padding>
+         <children>
+            <Button fx:id="button" alignment="center" onAction="#startCamera" text="Start camera" />
+            <Button fx:id="recButton" mnemonicParsing="false" text="Rec"  onAction="#record"/>
+         </children>
+      </HBox>
+   </bottom>
 </BorderPane>
