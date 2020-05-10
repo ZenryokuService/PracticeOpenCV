@@ -100,7 +100,6 @@ public class ImageSlicerMain {
 	}
 
 	private ImageIcon dstImage(String fileName, Mat downloadFile, String sufix, int xPos, int yPos, int size, int times) {
-		int part = (1 + times) * size;
 		Rect roi = new Rect(xPos, yPos, size, size);
 		System.out.println("x: " + roi.x);
 		System.out.println("y: " + roi.y);
