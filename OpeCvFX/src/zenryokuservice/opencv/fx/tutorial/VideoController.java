@@ -168,12 +168,6 @@ public class VideoController
 					// add a logo...
 					if (logoCheckBox.isSelected() && this.logo != null)
 					{
-						if (debug) {
-							System.out.println("*** デバック ***");
-							System.out.println("frame: cols=" + frame.cols() + " rows=" + frame.rows());
-							System.out.println("logo: cols=" + logo.cols() + " rows=" + logo.rows());
-							debug = false;
-						}
 						Rect roi = new Rect(frame.cols() - logo.cols(), frame.rows() - logo.rows(), logo.cols(),
 								logo.rows());
 						Mat imageROI = frame.submat(roi);

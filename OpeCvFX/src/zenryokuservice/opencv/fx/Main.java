@@ -17,7 +17,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.fxml.FXMLLoader;
 
 /**
- * OpenCVnogaの学習用のGUIを作成する。
+ * OpenCVの学習用のGUIを作成する。
  * JavaFXで画面を作成している<br/>
  * 1.SceneBuilderでFXMLを出力
  * 2.FXMLで取得したコンポーネントを表示する
