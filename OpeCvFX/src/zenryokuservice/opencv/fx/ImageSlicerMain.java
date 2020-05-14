@@ -8,7 +8,13 @@
  */
 package zenryokuservice.opencv.fx;
 
+import java.awt.AlphaComposite;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.awt.image.ColorModel;
+import java.awt.image.IndexColorModel;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -27,8 +33,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import org.opencv.core.Core;
+import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfByte;
+import org.opencv.core.MatOfInt;
 import org.opencv.core.Rect;
 import org.opencv.imgcodecs.Imgcodecs;
 
@@ -81,13 +89,12 @@ public class ImageSlicerMain {
 		double heightTimes = downloadFile.height() / dtop;
 		double widthTimes = downloadFile.width() / dleft;
 		int times = 0;
-		for (int i = 0; i < heightTimes; i++) {
-			for (int j = 0; j < widthTimes; j++) {
-				System.out.println("i = " + i);
-				System.out.println("j = " + j);
-				iconList.add(dstImage(fileName, downloadFile, String.valueOf(i) + "_" + String.valueOf(j), j * size, i * size, size, times));
+		for (int i = 0; i < heightTimes-1; i++) {
+			for (int j = 0; j < widthTimes-1; j++) {
 				times++;
+				break;
 			}
+			break;
 		}
 		// Create Swing Compoenent
 		JFrame frame = new JFrame("Show Image");
@@ -104,19 +111,20 @@ public class ImageSlicerMain {
 		System.out.println("x: " + roi.x);
 		System.out.println("y: " + roi.y);
 		Mat target = downloadFile.submat(roi);
-		MatOfByte bytes = new MatOfByte();
-		Imgcodecs.imencode(".png", target, bytes);
-		byte[] b = bytes.toArray();
-		InputStream in = new ByteArrayInputStream(b);
-		BufferedImage buf = null;
-		try {
-			buf = ImageIO.read(in);
-			File out = new File("resources/dst/" + fileName + "_" + sufix + ".png");
-			ImageIO.write(buf, "png", out);
-		} catch(IOException e) {
-			e.printStackTrace();
+
+		return null;
+	}
+
+	private Mat createAlpha(Mat buf) {
+		int width = buf.width();
+		int height = buf.height();
+		for (int y = 0; y < height; y++) {
+			for (int x = 0; x < width; x++) {
+//					System.out.println("x: " + x + " y: " + y + " value: " + buf.get(y, x));
+			}
 		}
-		return new ImageIcon(buf);
+		BufferedImage background = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+		return buf;
 	}
 
 	private void coutFile(Mat img, String path) {
@@ -128,7 +136,8 @@ public class ImageSlicerMain {
 	}
 
 	public static void main(String[] args) {
-		ImageSlicerMain main = new ImageSlicerMain(32, 32, 32, 32);
-		main.loadImg("charactors", "pipo-charachip001.png", 32);
+		int targetSize = 40;
+		ImageSlicerMain main = new ImageSlicerMain(targetSize, targetSize, targetSize, targetSize);
+		main.loadImg("charactors", "pipo-charachip007.png", 32);
 	}
 }
