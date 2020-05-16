@@ -10,6 +10,7 @@ import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import zenryokuservice.opencv.fx.controller.TestingCvController;
 import zenryokuservice.opencv.fx.tutorial.VideoController;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -44,7 +45,7 @@ public class Main extends Application {
 	 */
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		FXMLLoader loader = new FXMLLoader(ClassLoader.getSystemResource("OpenCvTest.fxml"));
+		FXMLLoader loader = new FXMLLoader(ClassLoader.getSystemResource("TestingCv.fxml"));
 		BorderPane root = (BorderPane) loader.load();
 		Scene scene = new Scene(root, 800, 600);
 		scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
@@ -53,7 +54,7 @@ public class Main extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.show();
 		// 作成するクラス
-		OpenCvController controller = loader.getController();
+		TestingCvController controller = loader.getController();
 		primaryStage.setOnCloseRequest((new EventHandler<WindowEvent>() {
 			public void handle(WindowEvent we) {
 				controller.setClosed();

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.canvas.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+
+<BorderPane fx:controller="zenryokuservice.opencv.fx.controller.TestingCvController"
+		maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+		prefHeight="400.0" prefWidth="600.0"
+		xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <top>
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label text="Input app no" />
+            <TextField fx:id="input" promptText="App No" onAction="#clickExecute" />
+            <Button mnemonicParsing="false" text="Execute" onAction="#clickExecute"/>
+         </children>
+      </HBox>
+   </top>
+   <center>
+      <Canvas fx:id="testCanvas" height="200.0" width="200.0" BorderPane.alignment="CENTER" />
+   </center>
+   <bottom>
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button mnemonicParsing="false" text="Clear"  onAction="#clear"/>
+         </children>
+      </HBox>
+   </bottom>
+</BorderPane>
