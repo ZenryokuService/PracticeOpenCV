@@ -27,6 +27,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import zenryokuservice.opencv.fx.CommandIF;
 import zenryokuservice.opencv.fx.learn.LearnOpenCv;
 
 /**
@@ -41,30 +42,21 @@ public class TestingCvController {
 	@FXML
 	private TextField input;
 
-	private LearnOpenCv testing;
-
 	/** コンストラクタ */
 	public TestingCvController() {
 		this.testCanvas = new Canvas();
-		this.testing = new LearnOpenCv();
+//		this.testing = new LearnOpenCv();
 	}
 
+	/**
+	 * 画面のExecuteボタンを押下した時に起動する処理
+	 */
 	@FXML
 	protected void clickExecute() {
-		
+		// 入力確認用
 		System.out.println(this.input.getText());
-		URL url = getClass().getResource("/pipo-charachip007.png");
-		Mat charactor = Imgcodecs.imread(url.getPath(), CvType.CV_8UC4);
-		MatOfByte charaByte = new MatOfByte();
-		Imgcodecs.imencode(".png", charactor, charaByte);
-		try {
-			BufferedImage buf = ImageIO.read(new ByteArrayInputStream(charaByte.toArray()));
-			GraphicsContext g = testCanvas.getGraphicsContext2D();
-			g.drawImage(SwingFXUtils.toFXImage(buf, null), buf.getWidth(), buf.getHeight());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		CommandIF cmd = new LearnOpenCv();
+		cmd.execute(this.testCanvas);
 	}
 
 	@FXML
@@ -72,9 +64,13 @@ public class TestingCvController {
 		// 現状は空実装
 	}
 
+	/**
+	 * Clearボタンを押下した時の処理
+	 */
 	@FXML
 	public void clear() {
 		System.out.println("Clear");
+		// 描画したものをクリアする
 		this.testCanvas.getGraphicsContext2D().clearRect(0, 0, this.testCanvas.getWidth(), this.testCanvas.getHeight());
 	}
 }
