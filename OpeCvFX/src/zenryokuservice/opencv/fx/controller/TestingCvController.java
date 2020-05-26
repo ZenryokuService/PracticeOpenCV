@@ -12,6 +12,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Properties;
 
 import javax.imageio.ImageIO;
 
@@ -27,6 +28,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
 import zenryokuservice.opencv.fx.CommandIF;
 import zenryokuservice.opencv.fx.learn.LearnOpenCv;
 
@@ -38,25 +40,54 @@ import zenryokuservice.opencv.fx.learn.LearnOpenCv;
 public class TestingCvController {
 
 	@FXML
-	private Canvas testCanvas;
+	private Canvas testCanvasBefore;
+	@FXML
+	private Canvas testCanvasAfter;
+
 	@FXML
 	private TextField input;
+	
+	private Properties prop;
+	
+	private CommandIF cmd;
+
+	private Pane pane;
 
 	/** コンストラクタ */
 	public TestingCvController() {
-		this.testCanvas = new Canvas();
+		this.testCanvasBefore = new Canvas();
+		this.testCanvasAfter = new Canvas();
 //		this.testing = new LearnOpenCv();
+		this.prop = new Properties();
+		String propPath = "/command.properties";
+		try {
+			this.prop.load(this.getClass().getResourceAsStream(propPath));
+		} catch (IOException e) {
+			System.out.println(">>> Error! プロパティファイルの読み込みに失敗しました。" + propPath);
+			e.printStackTrace();
+		}
+		// 確認
+		System.out.println("プロパティ: " + prop.get("hello"));
 	}
 
 	/**
 	 * 画面のExecuteボタンを押下した時に起動する処理
 	 */
 	@FXML
-	protected void clickExecute() {
+	protected void clickExecute() throws Exception {
+		// 初期化する
+		cmd = null;
 		// 入力確認用
-		System.out.println(this.input.getText());
-		CommandIF cmd = new LearnOpenCv();
-		cmd.execute(this.testCanvas);
+//		System.out.println(this.input.getText());
+		String inputStr = this.input.getText();
+		cmd = this.getCommand(inputStr);
+		if (cmd == null) {
+			// プロパティファイルに、コマンドがない
+			System.out.println("コマンドがあません。" + this.input.getText());
+		} else {
+			// コマンド実行
+			cmd.execute(this.pane);
+		}
 	}
 
 	@FXML
@@ -71,6 +102,48 @@ public class TestingCvController {
 	public void clear() {
 		System.out.println("Clear");
 		// 描画したものをクリアする
-		this.testCanvas.getGraphicsContext2D().clearRect(0, 0, this.testCanvas.getWidth(), this.testCanvas.getHeight());
+		this.testCanvasBefore.getGraphicsContext2D().clearRect(0, 0, this.testCanvasBefore.getWidth(), this.testCanvasBefore.getHeight());
+		// 描画したものをクリアする
+		this.testCanvasAfter.getGraphicsContext2D().clearRect(0, 0, this.testCanvasAfter.getWidth(), this.testCanvasAfter.getHeight());
+	}
+
+	public CommandIF getCommand() {
+		return this.cmd;
+	}
+
+	public Canvas getBefore() {
+		return this.testCanvasBefore;
+	}
+	// --------- プライベートメソッド -------- //
+	private CommandIF getCommand(String command) {
+		String fulClassName = this.prop.getProperty(command);
+		if (fulClassName == null) {
+			return null;
+		}
+		CommandIF cmd = null;
+		try {
+			// クラスオブジェクトの取得
+			@SuppressWarnings("rawtypes")
+			Class c = Class.forName(fulClassName);
+			@SuppressWarnings({ "unchecked" })
+			Class<? extends CommandIF> clz = (Class<? extends CommandIF>) c;
+			// 取得したクラスオブジェクトのインスタンス生成
+			cmd = clz.newInstance();
+		} catch (ClassNotFoundException e) {
+			System.out.println("呼び出しクラスにCommandIFが実装されていません。" + fulClassName);
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return cmd;
+	}
+
+	@FXML
+	private void terminated() {
+		System.exit(0);
+	}
+
+	public void setPane(Pane pane) {
+		this.pane = pane;
 	}
 }

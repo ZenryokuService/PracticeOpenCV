@@ -1,32 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.canvas.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-
-<BorderPane fx:controller="zenryokuservice.opencv.fx.controller.TestingCvController"
-		maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-		prefHeight="400.0" prefWidth="600.0"
-		xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="zenryokuservice.opencv.fx.controller.TestingCvController">
    <top>
-      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="50.0" BorderPane.alignment="CENTER">
          <children>
             <Label text="Input app no" />
-            <TextField fx:id="input" promptText="App No" onAction="#clickExecute" />
-            <Button mnemonicParsing="false" text="Execute" onAction="#clickExecute"/>
+            <TextField fx:id="input" promptText="App No" />
+            <Button mnemonicParsing="false" onAction="#clickExecute" text="Execute" />
          </children>
       </HBox>
    </top>
-   <center>
-      <Canvas fx:id="testCanvas" height="200.0" width="200.0" BorderPane.alignment="CENTER" />
-   </center>
    <bottom>
-      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <HBox alignment="CENTER" prefHeight="50.0" BorderPane.alignment="CENTER">
          <children>
-            <Button mnemonicParsing="false" text="Clear"  onAction="#clear"/>
+            <Button mnemonicParsing="false" onAction="#clear" text="Clear" />
+            <Button mnemonicParsing="false" onAction="#terminated" text="Exit" />
          </children>
       </HBox>
    </bottom>
+   <center>
+      <HBox alignment="CENTER" prefHeight="228.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+         <children>
+            <Canvas fx:id="testCanvasBefore" height="200.0" width="200.0" />
+            <Canvas fx:id="testCanvasAfter" height="200.0" width="200.0">
+               <rotationAxis>
+                  <Point3D x="10.0" z="1.0" />
+               </rotationAxis>
+            </Canvas>
+         </children>
+      </HBox>
+   </center>
 </BorderPane>

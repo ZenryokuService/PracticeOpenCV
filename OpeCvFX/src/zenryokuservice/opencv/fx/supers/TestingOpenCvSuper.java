@@ -6,7 +6,7 @@
  * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
  * Neither the name ProconServerRPG JavaFX Library nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
  */
-package zenryokuservice.opencv.fx;
+package zenryokuservice.opencv.fx.supers;
 
 import java.awt.image.BufferedImage;
 
@@ -14,25 +14,42 @@ import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.layout.Pane;
+import zenryokuservice.opencv.fx.CommandIF;
 
 /**
- * コマンド実行するための抽象クラス。
- * 
  * @author takunoji
  *
- * 2020/05/17
+ * 2020/05/23
  */
-public interface CommandIF {
-	/** Canvasクラスから取得したGraphics2Dに描画する */
-	public abstract void execute(Pane pane) throws Exception;
-	/** 実装クラスを取得する */
-	public  abstract CommandIF getCommand();
-	/** 描画したCanvasを取得する */
-	public abstract Canvas getBefore() throws Exception;
-	public abstract Canvas getAfter() throws Exception;
-	public abstract GraphicsContext getBeforeGraphics();
-	public abstract GraphicsContext getAfterGraphics();	
-	public abstract BufferedImage getBeforeImage();
-	public abstract BufferedImage getAfterImage();
+public abstract class TestingOpenCvSuper implements CommandIF {
+	protected ObservableList<Node> observableList;
+	protected GraphicsContext graphicsBefore;
+	protected GraphicsContext graphicsAfter;
+	protected BufferedImage beforeImage;
+	protected BufferedImage afterImage;
+	
+	public TestingOpenCvSuper() {
+	}
+
+	public Canvas getBefore() throws Exception {
+		Canvas before = null;
+		if (observableList == null) {
+			throw new Exception("abservableListが設定されていません");
+		}
+		for (Node node : observableList) {
+			before = (Canvas) node.lookup("#testCanvasBefore");
+		}
+		return before;
+	}
+
+	public Canvas getAfter() throws Exception{
+		if (observableList == null) {
+			throw new Exception("abservableListが設定されていません");
+		}
+		Canvas after = null;
+		for (Node node : observableList) {
+			after = (Canvas) node.lookup("#testCanvasAfter");
+		}
+		return after;
+	}
 }
