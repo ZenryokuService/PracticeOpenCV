@@ -16,7 +16,9 @@ import javax.imageio.ImageIO;
 
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfByte;
+import org.opencv.core.Size;
 import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.imgproc.Imgproc;
 
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
@@ -25,17 +27,20 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Pane;
 import zenryokuservice.opencv.fx.CommandIF;
-import zenryokuservice.opencv.fx.supers.TestingOpenCvSuper;
 
 /**
  * @author takunoji
  *
- * 2020/05/26
+ * 2020/05/30
  */
-public class Prac1 implements CommandIF {
+public class Prac2 implements CommandIF {
 
+	/* (non-Javadoc)
+	 * @see zenryokuservice.opencv.fx.CommandIF#execute(javafx.scene.layout.Pane)
+	 */
 	@Override
 	public void execute(Pane pane) throws Exception {
+		// このメソッドも実装する必要あり、というかここが動く
 		ObservableList<Node> obsList = pane.getChildren();
 		Canvas before = null;
 		for (Node node : obsList) {
@@ -45,15 +50,22 @@ public class Prac1 implements CommandIF {
 		URL url = getClass().getResource("/himawari.png");
 		// イメージファイルをロードして行列(Mat)に格納
 		Mat img = Imgcodecs.imread(url.getPath(), Imgcodecs.IMREAD_COLOR);
+		
+		// 今回はサイズ変更を行う
+		Mat resizeImage = new Mat();
+		Size size = new Size(200, 200);
+		// 読み込んだMatをresizeImageに書き込む
+		Imgproc.resize(img, resizeImage, size);
 		MatOfByte bikeByte = new MatOfByte();
 		// 画像データをMatOfByteに書き込む
-		Imgcodecs.imencode(".jpeg", img, bikeByte);
+		Imgcodecs.imencode(".jpeg", resizeImage, bikeByte);
 		// BuffereImageを取得する
 		BufferedImage outImage = ImageIO.read(new ByteArrayInputStream(bikeByte.toArray()));
 		// Canvasへの描画準備
 		GraphicsContext g = before.getGraphicsContext2D();
 		// 描画ポイントを指定して描画する
 		g.drawImage(SwingFXUtils.toFXImage(outImage, null), 0, 0);
+		
 		
 	}
 
@@ -62,7 +74,7 @@ public class Prac1 implements CommandIF {
 	 */
 	@Override
 	public CommandIF getCommand() {
-		// TODO Auto-generated method stub
+		// このメソッドだけは実装する必要あり
 		return this;
 	}
 
