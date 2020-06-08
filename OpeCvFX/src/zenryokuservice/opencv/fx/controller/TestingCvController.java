@@ -114,6 +114,14 @@ public class TestingCvController {
 	public Canvas getBefore() {
 		return this.testCanvasBefore;
 	}
+
+	public Canvas getAfter() {
+		return this.testCanvasAfter;
+	}
+
+	public void onTextArea() {
+		
+	}
 	// --------- プライベートメソッド -------- //
 	private CommandIF getCommand(String command) {
 		String fulClassName = this.prop.getProperty(command);

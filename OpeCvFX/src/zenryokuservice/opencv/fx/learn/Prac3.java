@@ -61,7 +61,8 @@ public class Prac3 implements CommandIF {
 		// 
 		Mat roi = img.submat(new Rect(20, 20, tea.width(), tea.height()));
 		Mat dst = new Mat();
-		tea.copyTo(roi);
+		Core.addWeighted(tea, 0.2, roi, 0.8, 0.5, dst);
+		dst.copyTo(roi);
 
 //		Core.addWeighted(roi, 0.8, tea, 0.8, 0, dst);
 		

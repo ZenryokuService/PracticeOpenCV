@@ -11,9 +11,11 @@ package zenryokuservice.opencv.fx.supers;
 import java.awt.image.BufferedImage;
 
 import javafx.collections.ObservableList;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 import zenryokuservice.opencv.fx.CommandIF;
 
 /**
@@ -23,10 +25,17 @@ import zenryokuservice.opencv.fx.CommandIF;
  */
 public abstract class TestingOpenCvSuper implements CommandIF {
 	protected ObservableList<Node> observableList;
+	protected Canvas before;
+	protected Canvas after;
 	protected GraphicsContext graphicsBefore;
 	protected GraphicsContext graphicsAfter;
 	protected BufferedImage beforeImage;
 	protected BufferedImage afterImage;
+	/** 棒などのイメージ */
+	protected BufferedImage optImg;
+
+	protected double x;
+	protected double y;
 	
 	public TestingOpenCvSuper() {
 	}
@@ -49,7 +58,39 @@ public abstract class TestingOpenCvSuper implements CommandIF {
 		Canvas after = null;
 		for (Node node : observableList) {
 			after = (Canvas) node.lookup("#testCanvasAfter");
+			if (after != null) {
+				break;
+			}
 		}
 		return after;
+	}
+
+	public void drawOpt() {
+		graphicsBefore.drawImage(SwingFXUtils.toFXImage(optImg, null), 10, 10);
+	}
+
+	public void hideOpt() {
+		
+	}
+
+	public void clearText() {
+		graphicsBefore.clearRect(this.x * 0.2, this.y * 0.8, this.x * 0.6, this.y * 0.9);
+	}
+
+	public void drawText(String in) {
+		System.out.println(in);
+		graphicsBefore.setFill(Color.BLACK);
+		graphicsBefore.fillText(in, this.x * 0.2, this.y * 0.2);
+		
+	}
+
+	public void onTextArea() {
+		graphicsBefore.setFill(Color.AQUA);
+		graphicsBefore.fillRect(this.x * 0.2, this.y * 0.8, this.x * 0.6, this.y * 0.9);
+	}
+
+	public void setTextPos(double x, double y) {
+		this.x = x;
+		this.y = y;
 	}
 }

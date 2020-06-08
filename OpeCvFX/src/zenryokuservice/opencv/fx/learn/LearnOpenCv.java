@@ -30,7 +30,9 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import zenryokuservice.opencv.fx.CommandIF;
 import zenryokuservice.opencv.fx.supers.TestingOpenCvSuper;
 
@@ -40,27 +42,31 @@ import zenryokuservice.opencv.fx.supers.TestingOpenCvSuper;
  * 2020/05/16
  */
 public class LearnOpenCv extends TestingOpenCvSuper {
-
 	/* (non-Javadoc)
 	 * @see zenryokuservice.opencv.fx.CommandIF#execute(javafx.scene.canvas.GraphicsContext)
 	 */
 	@Override
 	public void execute(Pane pane) throws Exception {
-		Canvas before = null;
-		Canvas after = null;
 		
 		observableList = pane.getChildren();
 		BorderPane border = (BorderPane) pane;
 		before = getBefore();
 		after = getAfter();
-		before.setWidth(500.0);
-		before.setHeight(500.0);
+		before.setWidth(pane.getWidth());
+		before.setHeight(pane.getHeight());
+		HBox hbox = (HBox)border.getCenter();
+		hbox.setMaxSize(pane.getWidth(), pane.getHeight());
+		hbox.getChildren().clear();
+		hbox.getChildren().add(before);
+		setTextPos(pane.getWidth(), pane.getHeight());
 		// 表示するイメージを取得
-		URL url = getClass().getResource("/myFace.jpg");
+		URL url = getClass().getResource("/myFace.png");
+		URL url_kanaB = getClass().getResource("/myFace.png");
 		// 表示イメージを読み取る
-		Mat charactor = Imgcodecs.imread(url.getPath(), Imgcodecs.IMREAD_COLOR);
-		Mat gray = new Mat();
-		Imgproc.cvtColor(charactor, gray, Imgproc.COLOR_BGR2GRAY);
+		Mat charactor = Imgcodecs.imread(url.getPath(), Imgcodecs.IMREAD_UNCHANGED);
+		Mat gray = Imgcodecs.imread(url.getPath(), Imgcodecs.IMREAD_GRAYSCALE);
+		Mat kanaImg = Imgcodecs.imread(url_kanaB.getPath(), Imgcodecs.IMREAD_UNCHANGED);
+		optImg = createBufferedImage(kanaImg, ".png");
 		// 背景除去
 		Mat hierarchy = Mat.zeros(new Size(200, 200), CvType.CV_8UC1);
 		List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
@@ -78,38 +84,23 @@ public class LearnOpenCv extends TestingOpenCvSuper {
 //		printContuors(contours);
 //		printHierarchy(hierarchy);
 		Mat dstContuor = Mat.zeros(new Size(charactor.width(),charactor.height()),CvType.CV_8UC1);
-		Scalar color=new Scalar(255,255,255);
-		for (int i = 0; i < contours.size(); i++) {
-	        Imgproc.drawContours(dstContuor, contours, i, color,0, 8, hierarchy);
-		}
+		Scalar color=new Scalar(0,255,0);
+	   Imgproc.drawContours(dstContuor, contours, 0, color,0, 4, hierarchy);
 
 //		Size resize = new Size(before.getWidth() / 3, before.getHeight() / 3);
 //		Mat reSizeChar = new Mat();
 //		Imgproc.resize(charactor, reSizeChar, resize);
-		
-		MatOfByte charaByteBefore = new MatOfByte();
-		// 表示イメージをcharaByteに書き込む
-		Imgcodecs.imencode(".png", dstContuor, charaByteBefore);
 
-		Mat dst = new Mat();
-//		Imgproc.threshold(reSizeChar, dst, 100, 255, Imgproc.THRESH_BINARY);
-		MatOfByte charaByte = new MatOfByte();
-		// 表示イメージをcharaByteに書き込む
-		Imgcodecs.imencode(".png", charactor, charaByte);
-		
 		try {
 			// 書き込んだイメージを描画する
-			BufferedImage buf = ImageIO.read(new ByteArrayInputStream(charaByteBefore.toArray()));
-			BufferedImage buf1 = ImageIO.read(new ByteArrayInputStream(charaByte.toArray()));
+			BufferedImage buf = createBufferedImage(charactor, ".png");
 			beforeImage = buf;
-			GraphicsContext g = before.getGraphicsContext2D();
-			g.drawImage(SwingFXUtils.toFXImage(buf, null), buf.getWidth(), buf.getHeight());
-//			graphicsBefore = g;
-			
-//			graphicsAfter = after.getGraphicsContext2D();
-//			graphicsAfter.drawImage(SwingFXUtils.toFXImage(buf1, null), buf1.getWidth(), buf1.getHeight());
+			graphicsBefore = before.getGraphicsContext2D();
+			graphicsBefore.drawImage(SwingFXUtils.toFXImage(buf, null), buf.getWidth(), buf.getHeight());
+			graphicsAfter = after.getGraphicsContext2D();
+			graphicsAfter.setFill(Color.AQUA);
+			graphicsAfter.fillRect(0, 0, after.getWidth(), after.getHeight());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -136,6 +127,12 @@ public class LearnOpenCv extends TestingOpenCvSuper {
 				}
 			}
 		}
+	}
+
+	private BufferedImage createBufferedImage(Mat img, String ext) throws IOException {
+		MatOfByte matOfByte = new MatOfByte();
+		Imgcodecs.imencode(".png", img, matOfByte);
+		 return ImageIO.read(new ByteArrayInputStream(matOfByte.toArray()));
 	}
 	/** コードのバックアップ */
 	private void bak1(Canvas canvas) {
