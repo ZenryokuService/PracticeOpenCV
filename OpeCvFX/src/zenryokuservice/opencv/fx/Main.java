@@ -25,6 +25,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.fxml.FXMLLoader;
 
 /**
@@ -212,6 +214,7 @@ public class Main extends Application {
 		newWindow = new Stage();
 		StackPane stack = new StackPane();
 		textArea = new TextArea();
+		textArea.setFont(Font.font("MS UI Gothic", FontWeight.BLACK, 19));
 		textArea.setOnKeyPressed(keyEvent -> {
 			KeyCode code = keyEvent.getCode();
 			if (keyEvent.isShiftDown() && KeyCode.SPACE.equals(code)) {
@@ -227,7 +230,7 @@ public class Main extends Application {
 			}
 		});
 		stack.getChildren().add(textArea);
-		Scene scene = new Scene(stack, 250, 50);
+		Scene scene = new Scene(stack, 450, 100);
 		newWindow.setScene(scene);
 		newWindow.initModality(Modality.WINDOW_MODAL);
 		newWindow.initOwner(primary);
