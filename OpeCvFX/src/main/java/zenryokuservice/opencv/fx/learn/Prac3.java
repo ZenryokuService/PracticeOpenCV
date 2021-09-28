@@ -57,7 +57,7 @@ public class Prac3 implements CommandIF {
 		 URL url2 = this.getClass().getResource("/Tea.png");
 		 Mat tea = Imgcodecs.imread(url2.getPath(), Imgcodecs.IMREAD_UNCHANGED);
 		// 文字列の配置
-		Imgproc.putText(img, "sample!", new Point(10, 10), Core.FONT_HERSHEY_SIMPLEX, 0.5, Scalar.all(0));
+		Imgproc.putText(img, "sample!", new Point(10, 10), Imgproc.FONT_HERSHEY_SIMPLEX, 0.5, Scalar.all(0));
 		// 
 		Mat roi = img.submat(new Rect(20, 20, tea.width(), tea.height()));
 		Mat dst = new Mat();

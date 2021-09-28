@@ -90,7 +90,7 @@ public class FourierController {
 				return;
 			}
 			// read the image in gray scale
-			this.image = Imgcodecs.imread(file.getAbsolutePath(), Imgcodecs.CV_LOAD_IMAGE_GRAYSCALE);
+			this.image = Imgcodecs.imread(file.getAbsolutePath(), Imgcodecs.IMREAD_GRAYSCALE);
 			// show the image
 			this.updateImageView(originalImage, Utils.mat2Image(this.image));
 			// set a fixed width

@@ -60,13 +60,17 @@ public class LearnOpenCv extends TestingOpenCvSuper {
 		hbox.getChildren().add(before);
 		setTextPos(pane.getWidth(), pane.getHeight());
 		// 表示するイメージを取得
-		URL url = getClass().getResource("/myFace.png");
-		URL url_kanaB = getClass().getResource("/myFace.png");
+		URL url = getClass().getResource("/charactors/myFace.png");
+		URL url_kanaB = getClass().getResource("/charactors/kanabo.png");
+System.out.println(url.getPath());
+System.out.println(url_kanaB.getPath());
 		// 表示イメージを読み取る
 		Mat charactor = Imgcodecs.imread(url.getPath(), Imgcodecs.IMREAD_UNCHANGED);
 		Mat gray = Imgcodecs.imread(url.getPath(), Imgcodecs.IMREAD_GRAYSCALE);
 		Mat kanaImg = Imgcodecs.imread(url_kanaB.getPath(), Imgcodecs.IMREAD_UNCHANGED);
-		optImg = createBufferedImage(kanaImg, ".png");
+System.out.println("*** " + kanaImg);
+//		optImg = createBufferedImage(kanaImg, ".png");
+		optImg = ImageIO.read(url_kanaB);
 		// 背景除去
 		Mat hierarchy = Mat.zeros(new Size(200, 200), CvType.CV_8UC1);
 		List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
@@ -93,7 +97,8 @@ public class LearnOpenCv extends TestingOpenCvSuper {
 
 		try {
 			// 書き込んだイメージを描画する
-			BufferedImage buf = createBufferedImage(charactor, ".png");
+			//BufferedImage buf = createBufferedImage(charactor, ".png");
+			BufferedImage buf = ImageIO.read(url);
 			beforeImage = buf;
 			graphicsBefore = before.getGraphicsContext2D();
 			graphicsBefore.drawImage(SwingFXUtils.toFXImage(buf, null), buf.getWidth(), buf.getHeight());
@@ -131,7 +136,7 @@ public class LearnOpenCv extends TestingOpenCvSuper {
 
 	private BufferedImage createBufferedImage(Mat img, String ext) throws IOException {
 		MatOfByte matOfByte = new MatOfByte();
-		Imgcodecs.imencode(".png", img, matOfByte);
+		Imgcodecs.imencode(ext, img, matOfByte);
 		 return ImageIO.read(new ByteArrayInputStream(matOfByte.toArray()));
 	}
 	/** コードのバックアップ */

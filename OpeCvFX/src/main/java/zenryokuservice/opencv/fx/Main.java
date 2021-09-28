@@ -47,7 +47,7 @@ public class Main extends Application {
 	
 	/** ネイティブライブラリを読み込む */
 	static {
-		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+		System.load("D:\\Apps\\opencv\\build\\java\\x64\\opencv_java430.dll");
 	}
 	/**
 	 * メインメソッド。
@@ -84,6 +84,7 @@ public class Main extends Application {
 		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			@Override
 			public void handle(KeyEvent event) {
+				System.out.println(event.getCode() + " : isShiftDown= " + event.isShiftDown());
 				if (event.isShiftDown() && event.getCode() == KeyCode.ENTER) {
 					// 入力モードと移動モードを切り替える
 					isTextIn = !isTextIn;
