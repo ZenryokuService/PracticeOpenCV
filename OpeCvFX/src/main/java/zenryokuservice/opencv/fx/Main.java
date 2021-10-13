@@ -15,6 +15,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 import zenryokuservice.opencv.fx.controller.TestingCvController;
+import zenryokuservice.opencv.fx.speach.BriefVoiceCls;
 import zenryokuservice.opencv.fx.supers.TestingOpenCvSuper;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -44,6 +45,7 @@ public class Main extends Application {
 	private double yPos;
 	private TextArea textArea;
 	private Stage newWindow;
+	private BriefVoiceCls voice;
 	
 	/** ネイティブライブラリを読み込む */
 	static {
@@ -68,7 +70,7 @@ public class Main extends Application {
 		BorderPane root = (BorderPane) loader.load();
 		Scene scene = new Scene(root, 800, 600);
 		scene.setFill(null);
-		scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+		//scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 
 		// 作成するクラス
 		final TestingCvController controller = loader.getController();
@@ -111,6 +113,7 @@ public class Main extends Application {
 				}
 			}
 		});
+		voice = new BriefVoiceCls();
 		primaryStage.setTitle("Video Processing");
 		primaryStage.setScene(scene);
 		primaryStage.show();
@@ -168,7 +171,6 @@ public class Main extends Application {
 	private void writeText(KeyCode code, TestingOpenCvSuper parent) {
 		try {
 			if (code.equals(KeyCode.ENTER)) {
-//				parent.setTextPos(parent.getAfter().getWidth(), parent.getAfter().getHeight());
 				parent.clearText();
 			} else {
 				parent.drawText(code.toString());
@@ -219,6 +221,7 @@ public class Main extends Application {
 		textArea.setOnKeyPressed(keyEvent -> {
 			KeyCode code = keyEvent.getCode();
 			if (keyEvent.isShiftDown() && KeyCode.SPACE.equals(code)) {
+				//				voice.execute(newWindow.toString());
 				newWindow.close();
 				isTextIn = false;
 			}
@@ -226,8 +229,10 @@ public class Main extends Application {
 		textArea.setOnKeyReleased(keyEvent -> {
 			KeyCode code = keyEvent.getCode();
 			if (keyEvent.isShiftDown() && KeyCode.ENTER.equals(code)) {
+				String val = textArea.getText();
 				textArea.setText("");
 				textArea.positionCaret(0);
+				voice.execute(val);
 			}
 		});
 		stack.getChildren().add(textArea);

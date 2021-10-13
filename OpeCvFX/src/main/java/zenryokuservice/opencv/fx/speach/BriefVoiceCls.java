@@ -1,31 +1,22 @@
 package zenryokuservice.opencv.fx.speach;
+
+import javax.speech.*;
+import javax.speech.synthesis.*;
 import java.beans.PropertyVetoException;
 import java.io.File;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import javax.speech.AudioException;
-import javax.speech.Central;
-import javax.speech.EngineException;
-import javax.speech.EngineList;
-import javax.speech.EngineModeDesc;
-import javax.speech.EngineStateError;
-import javax.speech.recognition.Recognizer;
-import javax.speech.recognition.RecognizerModeDesc;
-import javax.speech.synthesis.JSMLException;
-import javax.speech.synthesis.Speakable;
-import javax.speech.synthesis.SpeakableListener;
-import javax.speech.synthesis.Synthesizer;
-import javax.speech.synthesis.SynthesizerModeDesc;
-import javax.speech.synthesis.Voice;
+public class BriefVoiceCls {
 
-public class BriefVoiceDemo {
+    private Synthesizer synthesizer;
 
-    Synthesizer synthesizer;
+    private SpeakableListener optionalListener;
 
-    public static void main(String[] args) {
+    private KanjiConverter converter;
+
+    public BriefVoiceCls() {
 
         //default synthesizer values
         SynthesizerModeDesc modeDesc = new SynthesizerModeDesc(
@@ -41,135 +32,36 @@ public class BriefVoiceDemo {
                 Voice.AGE_DONT_CARE,   //age for this voice
                 Voice.GENDER_DONT_CARE,//gender for this voice
                 null);                 //prefer a running voice (Boolean)
-
-        boolean error=false;
-        for (int r=0;r<args.length;r++) {
-            String token= args[r];
-            String value= token.substring(2);
-
-            //overide some of the default synthesizer values
-            if (token.startsWith("-E")) {
-                //modeDesc.setEngineName(value);
-            } else if (token.startsWith("-M")) {
-                //modeDesc.setModeName(value);
-            } else
-                //overide some of the default voice values
-                if (token.startsWith("-V")) {
-                    voice.setName(value);
-                } else if (token.startsWith("-GF")) {
-                    voice.setGender(Voice.GENDER_FEMALE);
-                } else if (token.startsWith("-GM")) {
-                    voice.setGender(Voice.GENDER_MALE);
-                } else
-                //dont recognize this value so flag it and break out
-                {
-                    System.out.println(token+
-                            " was not recognized as a supported parameter");
-                    error = true;
-                    break;
-                }
-        }
-
-        //The example starts here
-        BriefVoiceDemo briefExample = new BriefVoiceDemo();
-        if (error) {
-            System.out.println("BriefVoiceDemo -E<ENGINENAME> " +
-                    "-M<time|general> -V<VOICENAME> -GF -GM");
-            //list all the available voices for the user
-            briefExample.listAllVoices();
-            System.exit(1);
-        }
-
-        //select synthesizer by the required parameters
-        briefExample.createSynthesizer(modeDesc);
+        // シンセサイザーのセットアップ
+        this.createSynthesizer(modeDesc);
         //print the details of the selected synthesizer
-        briefExample.printSelectedSynthesizerModeDesc();
+        this.printSelectedSynthesizerModeDesc();
 
         //allocate all the resources needed by the synthesizer
-        briefExample.allocateSynthesizer();
+        this.allocateSynthesizer();
 
         //change the synthesisers state from PAUSED to RESUME
-        briefExample.resumeSynthesizer();
+        this.resumeSynthesizer();
 
         //set the voice
-        briefExample.selectVoice(voice);
+        this.selectVoice(voice);
         //print the details of the selected voice
-        briefExample.printSelectedVoice();
+        this.printSelectedVoice();
+        // ここでセットアップ処理はおしまい。
 
         //create a listener to be notified of speech events.
-        SpeakableListener optionalListener= new BriefListener();
-
-        //The Date and Time can be spoken by any of the selected voices
-        SimpleDateFormat formatter = new SimpleDateFormat("h mm");
-        String dateText = "The time is now " + formatter.format(new Date());
-        //briefExample.speakTextSynchronously(dateText, optionalListener);
-
-        //General text like this can only be spoken by general voices
-        if (briefExample.isModeGeneral()) {
-            String[] moji = {"ah", "yee" , "hu", "a", "oh"};
-            String[] kagyo = {"kah", "kee", "ku", "ckea", "koh"};
-            String[] gagyo = {"gaah", "gy", "goo", "gue", "goh"};
-            String[] sagyo = {"saeh", "see", "su", "thea", "soh"};
-            String[] zagyo = {"zaeh", "zee", "zoo", "zea", "zoh"};
-            String[] tagyo = {"taeh", "tiee", "tsu", "te", "toh"};
-            String[] dagyo = {"daeh", "dgee", "do", "de", "doh"};
-            String[] nagyo = {"naeh", "niee", "nuh", "nea", "noh"};
-            String[] hagyo = {"haeh", "hiee", "hu", "hea", "hoh"};
-            String[] bagyo = { "baeh", "bee", "boo", "be", "boh"};
-            String[] magyo = {"maeh", "miee", "muh", "me", "moh"};
-            String[] yagyo = {"yaeh", "yu", "yoh"};
-            String[] ragyo = {"ra", "ri", "ru", "re", "roh"};
-            String[] wagyo = {"wa", "oh", "um"};
-            //speak plain text
-//            String plainText =
-//                    "Hello World, This is an example of plain text," +
-//                            " any markup like <jsml></jsml> will be spoken as is";
-//            for (String val : moji) {
-//                System.out.println(val);
-//                briefExample.speakTextSynchronously(val, optionalListener);
-//            }
-//            for (String val : kagyo) {
-//                System.out.println(val);
-//                briefExample.speakTextSynchronously(val, optionalListener);
-//            }
-//            for (String val : sagyo) {
-//                System.out.println(val);
-//                briefExample.speakTextSynchronously(val, optionalListener);
-//            }
-//            for (String val : tagyo) {
-//                System.out.println(val);
-//                briefExample.speakTextSynchronously(val, optionalListener);
-//            }
-//            for (String val : nagyo) {
-//                System.out.println(val);
-//                briefExample.speakTextSynchronously(val, optionalListener);
-//            }
-//            for (String val : hagyo) {
-//                System.out.println(val);
-//                briefExample.speakTextSynchronously(val, optionalListener);
-//            }
-//            for (String val : magyo) {
-//                System.out.println(val);
-//                briefExample.speakTextSynchronously(val, optionalListener);
-//            }
-//            for (String val : zagyo) {
-//                System.out.println(val);
-//                briefExample.speakTextSynchronously(val, optionalListener);
-//            }
-            for (String val : gagyo) {
-                System.out.println(val);
-                briefExample.speakTextSynchronously(val, optionalListener);
-            }
-
-//            //speak marked-up text from Speakable object
-//            Speakable speakableExample = new BriefSpeakable();
-//            briefExample.speakSpeakableSynchronously(speakableExample,
-//                    optionalListener);
-        }
-        //must deallocate the synthesizer before leaving
-        briefExample.deallocateSynthesizer();
+        optionalListener = new BriefListener();
+        // 変換処理クラス
+        converter = new KanjiConverter();
     }
 
+    /** このメソッドで話をするようにプログラムを作る。 */
+    public void execute(String talkMessage) {
+        String res = converter.convert(talkMessage);
+        String b = converter.toTalk(res);
+        System.out.println(b);
+        this.speakTextSynchronously(b, optionalListener);
+    }
     /**
      * Select voice supported by this synthesizer that matches the required
      * properties found in the voice object.  If no matching voice can be
@@ -282,7 +174,7 @@ public class BriefVoiceDemo {
             //Create a Synthesizer with specified required properties.
             //if none can be found null is returned.
             synthesizer = Central.createSynthesizer(modeDesc);
-        }
+       }
         catch (IllegalArgumentException e1) {
             e1.printStackTrace();
             System.exit(1);
