@@ -26,5 +26,9 @@ public class BriefVoiceClsTest {
         target.execute("Hello Worldを実装してみましょう。");
     }
 
+    @Test
+    public void testTalkVoice4() {
+        target.execute("12345。");
+    }
 
 }

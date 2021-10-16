@@ -20,6 +20,7 @@ public class KanjiConverterTest {
     public static void init() {
         // 前処理でテスト対象クラスをインスタンス化
         target = new KanjiConverter();
+        //System.setProperty("mbrola.base", "D:\\Apps\\freetts-1.2.2-bin\\freetts-1.2\\mbrola");
     }
 
     /** インスタンスが解放されるとき、ガベージコレクションで実行 */
@@ -51,14 +52,22 @@ public class KanjiConverterTest {
         });
     }
 
-    @Test
+//    @Test
     public void testSpeach() {
         String c = target.convert("本日はJava晴天なり");
         System.out.println(c);
         String res = target.toTalk(c);
         System.out.println(res);
-//        BriefVoiceCls cls = new BriefVoiceCls();
-//        cls.execute("本日は晴天なり");
     }
 
+    @Test
+    public void testNoTakl() {
+        String c = target.convert("はじめてのJava");
+        System.out.println(c);
+        String res = target.toTalk(c);
+        System.out.println(res);
+        BriefVoiceCls cls = new BriefVoiceCls();
+        cls.execute(res);
+
+    }
 }

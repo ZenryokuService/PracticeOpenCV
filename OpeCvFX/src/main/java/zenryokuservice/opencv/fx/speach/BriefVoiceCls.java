@@ -32,6 +32,7 @@ public class BriefVoiceCls {
                 Voice.AGE_DONT_CARE,   //age for this voice
                 Voice.GENDER_DONT_CARE,//gender for this voice
                 null);                 //prefer a running voice (Boolean)
+
         // シンセサイザーのセットアップ
         this.createSynthesizer(modeDesc);
         //print the details of the selected synthesizer
